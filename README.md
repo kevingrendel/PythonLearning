@@ -19,6 +19,7 @@ Cozmo Ideas
 -When face comes into view, display "Hello <name>" on screen
 -Speak words in a text file
 -input color word, change backpack to that color
+-tap a block, cozmo says "tap", tries to drive to the block that was tapped
 
 
 Links
