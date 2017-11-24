@@ -57,10 +57,13 @@ def getWordFromNumber(num):
 
 while(True):
 
-    text = input("Enter a number:")
+    text = input("Enter a whole number:")
     if text == "q":
         break
-    num = int(text)
 
-    word = getWordFromNumber(num)
-    print(word)
+    try:
+        num = abs(int(text))
+        word = getWordFromNumber(num)
+        print(word)
+    except:
+        print("only whole numbers allowed.")
