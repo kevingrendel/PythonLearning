@@ -9,10 +9,27 @@ def getTeens(num):
     return s
 
 def getUnderTwenty(num):
-    if num < 10:
+    if num <= 10:
         s = getTens(num)
-    s = getTeens(num)
+    else:
+        s = getTeens(num)
     return s
+
+def get20to99(num):
+    numWords = ["twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"]
+    numStr = str(num)
+    tens = numStr[0]
+    s = numWords[int(tens) - 2]
+    s = s + getTens(int(numStr[1]))
+    return s
+
+def getWordFromNumber(num):
+    if num < 20:
+        word = getUnderTwenty(num)
+    elif num >= 20 and num < 100:
+        word = get20to99(num)
+    return word
+
 
 while(True):
 
@@ -21,10 +38,5 @@ while(True):
         break
     num = int(text)
 
-    if num <= 10:
-        word = getTens(num)
-    elif num < 20:
-        word = getUnderTwenty(num)
-
+    word = getWordFromNumber(num)
     print(word)
-#print(num)
