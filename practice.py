@@ -1,3 +1,4 @@
-print("blarg")
-num = 10
-print(num)
+import numberwords
+
+v = numberwords.getWordFromNumber(565)
+print(v)
