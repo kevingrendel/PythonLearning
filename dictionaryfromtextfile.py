@@ -1,3 +1,12 @@
+#read entire file
+#use regex and match on alpha words
+#create dictionary with key as the word, and value being object
+    # word, 
+    # length, 
+    # count of occurances, 
+    # list of index locations in original file (can regex give you location of match?)
+#print words in alphabetic order, with other attributes
+
 import re
 import json
 
@@ -16,43 +25,30 @@ class WordIndex(object):
 expr = re.compile('([a-zA-Z]+)')
 
 with open('testdata\wordsfile.txt', 'r') as f:
-    #read entire file
-    #use regex and match on alpha words
-    #create dictionary with key as the word, and value being object
-        # word, 
-        # length, 
-        # count of occurances, 
-        # list of index locations in original file (can regex give you location of match?)
-    #print words in alphabetic order, with other attributes
-        
+    wordDict = {}  #dictionary to keep each word (key) and attributes (WordIndex)
+    text = f.read()  #read entire file, large files will need chunking
 
-    #dictionary to keep each word (key) and attributes (WordIndex)
-    wordDict = {}
+for m in expr.finditer(text):
+    matchText = m.group().lower()  #lower to ensure case is ignored
+    if matchText not in wordDict:
+        #add to dictionary
+        wordDict[matchText] = WordIndex(matchText, len(matchText), 1, [Location(m.start(), m.end())])
+    else:
+        #update attributes of existing item in dictionary
+        item = wordDict.get(matchText)
+        item.count += 1  #increment word count
+        item.locations.append(Location(m.start(), m.end()))  #add another location
 
-    text = f.read()
+sortedKeys = sorted(wordDict)
+for k in sortedKeys:
+    val = wordDict[k]
+    print(k, val.length, val.count)
+    for l in val.locations:
+        print(" location: {0}, {1}".format(l.start, l.end))
 
-    for m in expr.finditer(text):
-        matchText = m.group().lower()  #lower to ensure case is ignored
-        if matchText not in wordDict:
-            #add to dictionary
-            wordDict[matchText] = WordIndex(matchText, len(matchText), 1, [Location(m.start(), m.end())])
-        else:
-            #update attributes of existing item in dictionary
-            item = wordDict.get(matchText)
-            item.count += 1  #increment word count
-            item.locations.append(Location(m.start(), m.end()))  #add another location
+jsonText = json.dumps(wordDict, default=lambda o: o.__dict__)#wordDict.__dict__)
+print(jsonText)
 
-    sortedKeys = sorted(wordDict)
-    for k in sortedKeys:
-        val = wordDict[k]
-        print(k, val.length, val.count)
-        for l in val.locations:
-            print(" location: {0}, {1}".format(l.start, l.end))
-    
-    #jsonText = json.dumps(wordDict.__dict__)
-    #print(jsonText)
-    
-    # for k, v in wordDict.items():
-    #     print(k, v.length)
-
-    
+#write json to file
+with open('out.txt', 'w') as fout:
+    fout.write(jsonText)
